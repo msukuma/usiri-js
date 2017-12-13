@@ -1,0 +1,21 @@
+{
+  "name": "usiri",
+  "version": "0.1.0",
+  "description": "Maneja wa maneno ya siri",
+  "main": "usiri.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "\"password",
+    "manager\"",
+    "privacy",
+    "password",
+    "siri"
+  ],
+  "author": "Itenga",
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^4.0.1"
+  }
+}
