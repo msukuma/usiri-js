@@ -7,13 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "\"password",
-    "manager\"",
+    "password",
+    "manager",
     "privacy",
     "password",
     "siri"
   ],
   "author": "Itenga",
+  "repository": "https://github.com/msukuma/usiri-js",
   "license": "MIT",
   "dependencies": {
     "inquirer": "^4.0.1"
