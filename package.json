@@ -2,9 +2,10 @@
   "name": "usiri",
   "version": "0.1.0",
   "description": "Maneja wa maneno ya siri",
-  "main": "usiri.js",
+  "main": "lib/usiri.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "try": "node_modules/.bin/babel-node lib/usiri.js -n test -S any",
+    "test": "node_modules/.bin/babel-node test/test.js"
   },
   "keywords": [
     "password",
@@ -17,6 +18,14 @@
   "repository": "https://github.com/msukuma/usiri-js",
   "license": "MIT",
   "dependencies": {
-    "inquirer": "^4.0.1"
+    "commander": "^2.12.2",
+    "inquirer": "^4.0.1",
+    "is-plain-object": "^2.0.4",
+    "os-locale": "^2.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "mocha": "^4.0.1"
   }
 }
