@@ -4,8 +4,8 @@
   "description": "Maneja wa maneno ya siri",
   "main": "lib/usiri.js",
   "scripts": {
-    "try": "node_modules/.bin/babel-node lib/usiri.js -n test -S any",
-    "test": "node_modules/.bin/babel-node test/test.js"
+    "try": "node lib/usiri.js",
+    "test": "node_modules/mocha/bin/mocha test/test.js"
   },
   "keywords": [
     "password",
@@ -18,6 +18,7 @@
   "repository": "https://github.com/msukuma/usiri-js",
   "license": "MIT",
   "dependencies": {
+    "big-integer": "^1.6.26",
     "commander": "^2.12.2",
     "inquirer": "^4.0.1",
     "is-plain-object": "^2.0.4",
