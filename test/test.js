@@ -2,26 +2,26 @@ const assert = require('assert');
 const constants = require('../lib/constants/en');
 const isSymbol = require('../lib/helpers').isSymbol;
 const Usiri = require('../lib/usiri');
+const helpers = require('./helpers');
+const makeArgs = helpers.makeArgs;
 let usiri;
-const args = {
-  name: constants.test,
-  site: constants.test,
-  masterPassword: constants.test,
-  symbols: constants.defaults.symbols,
-  length:  constants.defaults.length,
-  release: constants.defaults.release,
-};
-
-console.log(args);
+let password;
+let args;
 
 describe('Usiri', () => {
-  describe('class definition', ()=> {
+  beforeEach(() => {
+    usiri = new Usiri();
+    args = makeArgs(constants);
+    password = usiri.makePassword(args);
+  });
+
+  describe('constructor', ()=> {
     it('should be a class', () => {
       assert(usiri.constructor === Usiri);
     });
 
-    it('should accept a plain object with locale defined', () => {
-      assert(usiri.constructor === Usiri);
+    it('should validate locale', () => {
+      assert.throws(() => new Usiri('fake'));
     });
   });
 
@@ -34,10 +34,11 @@ describe('Usiri', () => {
   });
 
   describe('#replaceSymbols', () => {
-    const password = '"';
-    let got = usiri.replaceSymbols(password, constants.symbols.none);
+    let password = '"';
+    let got;
 
     it('should return password with same length', () => {
+      got = usiri.replaceSymbols(password, constants.symbols.none);
       assert(password.length === got.length);
     });
 
@@ -53,10 +54,11 @@ describe('Usiri', () => {
   });
 
   describe('#insertSymbol', () => {
-    const password = 'p';
-    let got = usiri.insertSymbol(password, constants.symbols.none);
+    let password = 'p';
+    let got;
 
     it('should return password with same length', () => {
+      got = usiri.insertSymbol(password, constants.symbols.none);
       assert(password.length === got.length);
     });
 
@@ -72,10 +74,79 @@ describe('Usiri', () => {
   });
 
   describe('#makePassword', () => {
-    let password = usiri.makePassword(args);
 
-    it('should return a password string based on inputs', () => {
+    it('should return a password string', () => {
       assert(typeof password === 'string');
+    });
+
+    describe('args.symbols', () => {
+
+      describe('any', () => {
+        it('should return a password with any symbols', () => {
+          password = usiri.makePassword(args);
+          assert(constants.regex.symbols.test(password));
+        });
+      });
+
+      describe('unambiguous', () => {
+        it('should return a password with unambiguous symbols', () => {
+          args.symbols = constants.unambiguous;
+          password = usiri.makePassword(args);
+          assert(constants.regex.symbols.test(password));
+
+          password.get((chr) => {
+            if (isSymbol(chr)) {
+              assert(constants.symbols.unambiguous.indexOf(chr) !== -1);
+              return true;
+            }
+          });
+
+        });
+      });
+
+      describe('none', () => {
+        it('should return a password without symbols', () => {
+          args.symbols = constants.none;
+          password = usiri.makePassword(args);
+          assert(!constants.regex.symbols.test(password));
+        });
+      });
+    });
+
+    describe('args.length', () => {
+      it('should default to 23 characters', () => {
+        args.symbols = constants.defaults.symbols;
+        assert(password.length === constants.defaults.length);
+      });
+
+      it('should return a password of desired length', () => {
+        let newLength = 17;
+        args.length = newLength;
+        password = usiri.makePassword(args);
+        assert(password.length === newLength);
+      });
+
+      it('should allow a minimum password length of 16 characters', () => {
+        assert.throws(() => {
+          args.length = 15;
+          usiri.makePassword(args);
+        });
+      });
+
+      it('should limit password length to 88 characters', () => {
+        assert.throws(() => {
+          args.length = 89;
+          usiri.makePassword(args);
+        });
+      });
+    });
+
+    describe('args.release', () => {
+      it('should return a password that\'s different from that of another release', () => {
+        args.release = '1.1';
+        let newPassword = usiri.makePassword(args);
+        assert(password !== newPassword);
+      });
     });
   });
 });
