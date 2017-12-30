@@ -4,6 +4,7 @@ const isSymbol = require('../lib/helpers').isSymbol;
 const Usiri = require('../lib/usiri');
 const helpers = require('./helpers');
 const makeArgs = helpers.makeArgs;
+const passedAndType = helpers.passedAndType;
 let usiri;
 let password;
 let args;
@@ -79,7 +80,31 @@ describe('Usiri', () => {
       assert(typeof password === 'string');
     });
 
+    describe('args.name', () => {
+      passedAndType(makeArgs(constants), 'name', 'string');
+    });
+
+    describe('args.site', () => {
+      passedAndType(makeArgs(constants), 'site', 'string');
+    });
+
+    describe('args.masterPassword', () => {
+      passedAndType(makeArgs(constants), 'masterPassword', 'string');
+    });
+
     describe('args.symbols', () => {
+      passedAndType(makeArgs(constants), 'symbols', 'string');
+
+      it('should be one of [any, unambiguous, none]', () => {
+        assert.throws(() => {
+          args.symbols = 'throwError';
+          usiri.makePassword(args);
+        });
+
+        assert.doesNotThrow(() => {usiri.makePassword(makeArgs(constants));});
+        assert.doesNotThrow(() => {usiri.makePassword(makeArgs(constants, { symbols: 'unambiguous' }));});
+        assert.doesNotThrow(() => {usiri.makePassword(makeArgs(constants, { symbols: 'none' }));});
+      });
 
       describe('any', () => {
         it('should return a password with any symbols', () => {
@@ -114,6 +139,8 @@ describe('Usiri', () => {
     });
 
     describe('args.length', () => {
+      passedAndType(makeArgs(constants), 'length', 'number');
+
       it('should default to 23 characters', () => {
         args.symbols = constants.defaults.symbols;
         assert(password.length === constants.defaults.length);
