@@ -48,9 +48,12 @@ describe('Usiri', () => {
       assert(!isSymbol(got));
 
       got = usiri.replaceSymbols(password, constants.symbols.unambiguous);
-
       assert(password !== got);
       assert(isSymbol(got));
+
+      password = 'h';
+      got = usiri.replaceSymbols(password, constants.symbols.none);
+      assert(password === got);
     });
   });
 
@@ -68,7 +71,6 @@ describe('Usiri', () => {
       assert(!isSymbol(got));
 
       got = usiri.insertSymbol(password, constants.symbols.unambiguous);
-
       assert(password !== got);
       assert(isSymbol(got));
     });
