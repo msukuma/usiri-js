@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Maneja wa maneno ya siri",
   "main": "lib/usiri.js",
+  "bin": {
+    "usiri": "bin/usiri"
+  },
   "scripts": {
     "try": "node lib/usiri.js",
     "test": "node_modules/mocha/bin/mocha test/test.js"

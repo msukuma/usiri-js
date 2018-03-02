@@ -121,7 +121,7 @@ describe('Usiri', () => {
           password = usiri.makePassword(args);
           assert(constants.regex.symbols.test(password));
 
-          password.get((chr) => {
+          password.forEach((chr) => {
             if (isSymbol(chr)) {
               assert(constants.symbols.unambiguous.indexOf(chr) !== -1);
               return true;
